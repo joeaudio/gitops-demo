@@ -3,6 +3,9 @@ import http.server
 import json
 import pathlib
 import re
+import subprocess
+import sys
+import tempfile
 import threading
 import unittest
 import urllib.request
@@ -31,6 +34,19 @@ class AdvisoryUnitTests(unittest.TestCase):
                 self.assertGreater(len(item["summary"]), 40)
                 self.assertGreater(len(item["action"]), 40)
                 self.assertTrue(item["source"].startswith("https://"))
+
+    def test_image_tag_updater(self):
+        original = (ROOT / "k8s/k3s/kustomization.yaml").read_text()
+        with tempfile.TemporaryDirectory() as temporary:
+            script = pathlib.Path(temporary) / "scripts" / "set_image.py"
+            script.parent.mkdir()
+            script.write_text((ROOT / "scripts/set_image.py").read_text())
+            manifest = pathlib.Path(temporary) / "k8s/k3s/kustomization.yaml"
+            manifest.parent.mkdir(parents=True)
+            manifest.write_text(original)
+            sha = "a" * 40
+            subprocess.run([sys.executable, str(script), f"ghcr.io/joeaudio/gitops-demo:{sha}"], check=True)
+            self.assertIn("newTag: " + sha, manifest.read_text())
 
 
 class SiteIntegrationTests(unittest.TestCase):
