@@ -34,10 +34,16 @@ The [GitHub Actions workflow](.github/workflows/ci.yml) runs unit and integratio
 
 See [setup](docs/SETUP.md), [pipeline decisions](docs/DECISIONS.md), and [Codex issue workflow](docs/ISSUE-WORKFLOW.md).
 
+## Security briefing and controls
+
+The eight-slide [HTML](docs/slides/gitops-security-briefing.html), [PDF](docs/slides/gitops-security-briefing.pdf), and [PowerPoint](docs/slides/gitops-security-briefing.pptx) deck explains the security value, developer loop, and a possible ROSA adoption path. [Mermaid diagrams](docs/WORKFLOW.md) and the [AI/security control register](docs/AI-AND-SECURITY.md) are available for review. The project is [MIT licensed](LICENSE).
+
+CI now requires unit, HTTP integration, privacy, secure-defaults, and container image vulnerability checks before publication. A passing scan means no **detected high or critical CVEs at scan time**; it is not a guarantee that the image has no vulnerabilities.
+
 ## Verified on this Kali machine
 
-- Four unit and integration tests pass locally and in GitHub Actions.
-- The Podman preview serves at `127.0.0.1:18080`.
+- Nine unit, integration, and security regression tests pass locally. GitHub Actions runs the same suite on every PR and main push.
+- The hardened Podman image returned HTTP 200, four advisories, and the expected Content Security Policy on localhost. Recreate it with the Quick start commands.
 - k3s and Argo CD are installed. The Application is **Synced** and **Healthy**.
 - The k3s site returned HTTP 200 at `127.0.0.1:18081` through a localhost port-forward. Its JSON contains all four advisories, including the issue-driven OpenSSH briefing.
 - [Issue #1](https://github.com/joeaudio/gitops-demo/issues/1) became [PR #2](https://github.com/joeaudio/gitops-demo/pull/2), passed CI, merged, published a new image, and updated the GitOps tag. The local Codex CLI hit account quota, so the active Codex session completed that sample issue.
