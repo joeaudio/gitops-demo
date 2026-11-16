@@ -1,0 +1,32 @@
+{
+  "updated": "2026-11-17",
+  "advisories": [
+    {
+      "cve": "CVE-2024-3400",
+      "title": "PAN-OS GlobalProtect command injection",
+      "product": "PAN-OS",
+      "severity": "critical",
+      "summary": "A flaw in specific PAN-OS releases with GlobalProtect enabled can allow unauthenticated command execution. Palo Alto Networks reported exploitation in the wild.",
+      "action": "Confirm affected versions and GlobalProtect configuration, apply a vendor-fixed release, and review the vendor's incident guidance.",
+      "source": "https://security.paloaltonetworks.com/CVE-2024-3400"
+    },
+    {
+      "cve": "CVE-2021-44228",
+      "title": "Log4Shell in Apache Log4j",
+      "product": "Apache Log4j",
+      "severity": "critical",
+      "summary": "Unsafe JNDI lookup behavior in vulnerable Log4j 2 releases allowed remote code execution through attacker-controlled logged data.",
+      "action": "Inventory applications and bundled libraries, upgrade to a currently supported fixed Log4j release, and check exposure using Apache's security guidance.",
+      "source": "https://logging.apache.org/security.html"
+    },
+    {
+      "cve": "CVE-2024-3094",
+      "title": "XZ Utils supply-chain backdoor",
+      "product": "XZ Utils",
+      "severity": "high",
+      "summary": "Malicious code was introduced into selected XZ Utils release artifacts, creating a serious supply-chain exposure for affected Linux builds.",
+      "action": "Use your distribution's advisory to identify affected packages, replace them with trusted builds, and investigate exposed systems.",
+      "source": "https://access.redhat.com/security/cve/CVE-2024-3094"
+    }
+  ]
+}

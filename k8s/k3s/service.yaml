@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vulnerability-drop
+spec:
+  selector: {app: vulnerability-drop}
+  ports:
+    - port: 80
+      targetPort: 8080

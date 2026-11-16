@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vulnerability-drop
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: vulnerability-drop}
+  template:
+    metadata:
+      labels: {app: vulnerability-drop}
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/joeaudio/gitops-demo:bootstrap
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: {path: /, port: 8080}
+            initialDelaySeconds: 2
+          resources:
+            requests: {cpu: 25m, memory: 48Mi}
+            limits: {cpu: 250m, memory: 128Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]

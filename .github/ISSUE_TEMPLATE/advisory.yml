@@ -1,0 +1,26 @@
+name: New vulnerability briefing
+description: Ask the agent to research and draft a sourced defensive briefing
+title: "briefing: "
+labels: ["briefing"]
+body:
+  - type: input
+    id: cve
+    attributes:
+      label: CVE ID
+      placeholder: CVE-2024-3400
+    validations:
+      required: true
+  - type: input
+    id: primary_source
+    attributes:
+      label: Primary advisory URL
+      description: Vendor, project, or government advisory
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: What should the briefing explain?
+      description: Focus on exposure checks, remediation, and safe learning
+    validations:
+      required: true

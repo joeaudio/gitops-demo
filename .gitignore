@@ -1,0 +1,7 @@
+.env
+*.log
+*.kubeconfig
+auth.json
+.agent/
+__pycache__/
+.pytest_cache/

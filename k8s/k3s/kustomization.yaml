@@ -1,0 +1,8 @@
+namespace: vulnerability-drop
+resources:
+  - deployment.yaml
+  - service.yaml
+images:
+  - name: ghcr.io/joeaudio/gitops-demo
+    newName: ghcr.io/joeaudio/gitops-demo
+    newTag: bootstrap
