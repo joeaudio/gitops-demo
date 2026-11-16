@@ -27,6 +27,15 @@
       "summary": "Malicious code was introduced into selected XZ Utils release artifacts, creating a serious supply-chain exposure for affected Linux builds.",
       "action": "Use your distribution's advisory to identify affected packages, replace them with trusted builds, and investigate exposed systems.",
       "source": "https://access.redhat.com/security/cve/CVE-2024-3094"
+    },
+    {
+      "cve": "CVE-2024-6387",
+      "title": "regreSSHion in OpenSSH server",
+      "product": "OpenSSH server",
+      "severity": "high",
+      "summary": "A signal-handling race in affected OpenSSH server packages can allow an unauthenticated remote attacker to compromise a server. Distribution backports mean the upstream version alone does not establish exposure.",
+      "action": "Inventory internet-facing SSH servers, check each installed package against its distribution's CVE-2024-6387 advisory, and install the vendor's fixed package. Restrict SSH exposure while updates roll out.",
+      "source": "https://ubuntu.com/security/CVE-2024-6387"
     }
   ]
 }
