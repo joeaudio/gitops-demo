@@ -1,5 +1,5 @@
-import functools
 import http.server
+import importlib.util
 import json
 import pathlib
 import re
@@ -8,16 +8,12 @@ import sys
 import tempfile
 import threading
 import unittest
+import urllib.error
 import urllib.request
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 APP = ROOT / "app"
-
-
-class QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, *_args):
-        pass
 
 
 class AdvisoryUnitTests(unittest.TestCase):
@@ -52,8 +48,10 @@ class AdvisoryUnitTests(unittest.TestCase):
 class SiteIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        handler = functools.partial(QuietHandler, directory=str(APP))
-        cls.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        spec = importlib.util.spec_from_file_location("site_server", APP / "server.py")
+        site_server = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(site_server)
+        cls.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), site_server.SiteHandler)
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()
         cls.base = "http://127.0.0.1:" + str(cls.server.server_address[1])
@@ -69,13 +67,23 @@ class SiteIntegrationTests(unittest.TestCase):
             body = response.read().decode()
             self.assertEqual(response.status, 200)
         self.assertIn("Vulnerability Drop", body)
-        self.assertIn("advisories.json", body)
+        self.assertIn('src="/app.js"', body)
+        with urllib.request.urlopen(self.base + "/app.js") as script:
+            self.assertIn("advisories.json", script.read().decode())
+        self.assertIn("default-src 'none'", response.headers["Content-Security-Policy"])
+        self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
 
     def test_advisories_are_served_as_json(self):
         with urllib.request.urlopen(self.base + "/advisories.json") as response:
             data = json.load(response)
             self.assertEqual(response.status, 200)
         self.assertTrue(any(item["cve"] == "CVE-2024-3400" for item in data["advisories"]))
+
+    def test_hidden_files_are_not_served(self):
+        with self.assertRaises(urllib.error.HTTPError) as error:
+            urllib.request.urlopen(self.base + "/server.py")
+        self.assertEqual(error.exception.code, 404)
+        error.exception.close()
 
 
 if __name__ == "__main__":

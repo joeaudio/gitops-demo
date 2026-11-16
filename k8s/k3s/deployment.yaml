@@ -10,6 +10,12 @@ spec:
     metadata:
       labels: {app: vulnerability-drop}
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: web
           image: ghcr.io/joeaudio/gitops-demo:bootstrap
