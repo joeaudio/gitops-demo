@@ -34,6 +34,12 @@ The [GitHub Actions workflow](.github/workflows/ci.yml) runs unit and integratio
 
 See [setup](docs/SETUP.md), [pipeline decisions](docs/DECISIONS.md), and [Codex issue workflow](docs/ISSUE-WORKFLOW.md).
 
-## Current status
+## Verified on this Kali machine
 
-The site, tests, and Podman image run locally. The GitHub repo, hosted pipeline, k3s, and Argo CD are still being connected. Do not treat the local result as proof of a completed GitOps sync.
+- Four unit and integration tests pass locally and in GitHub Actions.
+- The Podman preview serves at `127.0.0.1:18080`.
+- k3s and Argo CD are installed. The Application is **Synced** and **Healthy**.
+- The k3s site returned HTTP 200 at `127.0.0.1:18081` through a localhost port-forward. Its JSON contains all four advisories, including the issue-driven OpenSSH briefing.
+- [Issue #1](https://github.com/joeaudio/gitops-demo/issues/1) became [PR #2](https://github.com/joeaudio/gitops-demo/pull/2), passed CI, merged, published a new image, and updated the GitOps tag. The local Codex CLI hit account quota, so the active Codex session completed that sample issue.
+
+After a reboot, k3s starts automatically. To view the deployed site again, run `sudo k3s kubectl -n vulnerability-drop port-forward --address 127.0.0.1 service/vulnerability-drop 18081:80` and open <http://127.0.0.1:18081>.
