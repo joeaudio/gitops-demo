@@ -5,4 +5,4 @@ resources:
 images:
   - name: ghcr.io/joeaudio/gitops-demo
     newName: ghcr.io/joeaudio/gitops-demo
-    newTag: 37610b9c5e2d116814783b8581088fbaf2207fdd
+    newTag: 8a631b6a38f5034235fc38fee17a4e002b465643
